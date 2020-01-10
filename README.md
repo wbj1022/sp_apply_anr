@@ -1,7 +1,12 @@
-# sp_apply_anr
-用来解决SharedPreferences apply引起的ANR.
+# [方案一](https://github.com/wbj1022/sp_apply_anr/blob/master/ActivityThreadHelper.java)
+原理参考[今日头条方案](https://www.jianshu.com/p/9ae0f6842689)
 
-# 用法及原理
+调用方法：
+<pre name="code" class="java">
+ActivityThreadHelper.tryHackActivityThreadH();
+</pre>
+
+# [方案二](https://github.com/wbj1022/sp_apply_anr/blob/master/SharedPreferencesWrapper.java)
 重写Application和Activity的getSharedPreferences方法，
 <pre name="code" class="java">
 @Override
