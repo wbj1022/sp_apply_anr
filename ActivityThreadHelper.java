@@ -44,9 +44,20 @@ public class ActivityThreadHelper {
         }
     }
 
-    private static void cleanBeforeSPBlock() {
+    private static boolean init = false;
+    private static Queue<Runnable> sFinishers;
 
-        Queue<Runnable> sFinishers = null;
+    private static void cleanBeforeSPBlock() {
+        if (!init) {
+            getPendingWorkFinishers();
+            init = true;
+        }
+        if (sFinishers != null && sFinishers.size() > 0) {
+            sFinishers.clear();
+        }
+    }
+
+    private static void getPendingWorkFinishers() {
         try {
             Class queuedWork = Class.forName("android.app.QueuedWork");
             Field finishers;
@@ -59,10 +70,6 @@ public class ActivityThreadHelper {
             sFinishers = (Queue<Runnable>) finishers.get(null);
         } catch (Throwable e) {
             TZLog.e(TAG, "getPendingWorkFinishers err: " + e.getMessage() + " Android version is : " + Build.VERSION.SDK_INT);
-        }
-
-        if (sFinishers != null && sFinishers.size() > 0) {
-            sFinishers.clear();
         }
     }
 
